@@ -1,4 +1,3 @@
-
 void permissao(char permissao[],char tipo){
 	switch(tipo){
 		case 0: //Quer dizer que é diretorio
@@ -93,6 +92,5 @@ int gerarInode(TpBloco disco[],int &topo,char tipo, int tamanho){
 		apontarBlocos(disco[novoInode].inode,tamanho,disco,topo,1);
 		posAtual=novoInode;
 	}
-	return atual;
+return atual;
 }
-
