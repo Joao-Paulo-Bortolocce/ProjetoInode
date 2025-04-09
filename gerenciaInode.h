@@ -1,13 +1,12 @@
-
 void permissao(char permissao[],char tipo){
 	switch(tipo){
-		case 0: //Quer dizer que é diretorio
+		case 0: //Quer dizer que ï¿½ diretorio
 			strcpy(permissao,PERMISSAO_DIR);
 			break;
-		case 1: //Quer dizer que é arquivo
+		case 1: //Quer dizer que ï¿½ arquivo
 			strcpy(permissao,PERMISSAO_ARQ);
 			break;
-		case 2: //Quer dizer que é link
+		case 2: //Quer dizer que ï¿½ link
 			strcpy(permissao,PERMISSAO_LINK);
 			break;
 	}
@@ -93,6 +92,5 @@ int gerarInode(TpBloco disco[],int &topo,char tipo, int tamanho){
 		apontarBlocos(disco[novoInode].inode,tamanho,disco,topo,1);
 		posAtual=novoInode;
 	}
-	return atual;
+return atual;
 }
-
