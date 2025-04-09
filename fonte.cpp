@@ -2,7 +2,7 @@
 // #include<windows.h>
 // #include<conio2.h>
 #include<string.h>
-
+#include<stdlib.h>
 
 #include"structs.h"
 #include"dataHorario.h"
@@ -77,14 +77,14 @@ int navegar(TpBloco disco[],int &pai,int &filho,char caminho[]) {
 
 
 int tamanhoDisco(){
-	textcolor(15);
+	// textcolor(15);
 	int tamanho;
 	printf("Informe a quantidade de blocos que o sistema tera: ");
 	scanf("%d",&tamanho);
 	while(tamanho<=1){
-		textcolor(4);
+		// textcolor(4);
 		printf("A quantidade informada e insuficiente\n");
-		textcolor(15);
+		// textcolor(15);
 		printf("Informe a quantidade de blocos que o sistema tera: ");
 		scanf("%d",&tamanho);
 	}
@@ -106,7 +106,7 @@ void inicializar(TpBloco disco[],int tamanho){
 }
 
 char isCaracResevado(char carac){
-    if(carac==126 || carac==47 || carac=='.' || carac==92 || carac=='*' || carac=='(' || carac==')' || carac=='@' ||  carac=='#' ||  carac=='?' ||  carac=='$' ||  carac==39 || carac==34 || carac==',')
+    if( carac==92 || carac=='*' || carac=='(' || carac==')' || carac=='@' ||  carac=='#' ||  carac=='?' ||  carac=='$' ||  carac==39 || carac==34 || carac==',')
         return 1;
     return 0;
 }
@@ -134,8 +134,24 @@ void pegaComando (char comando[], char res[]) {
 }
 
 
+char separaNomeCaminho(char comando[], char nome[]) {// retorna true se caminho for diferente de nome
+	int tl=strlen(comando);
+	int i;
+	for (i=tl;i>=0 && comando[i]!='/';i--);
+	if (i<0) {
+		strcpy(nome,comando);
+		return 0;
+	}
+	i++;
+	for (int j=0;i+j<tl;j++)
+		nome[j]=comando[i+j];
+	comando[i-1]='\0';
+	nome[i]='\0';
+	return 1;
+}
+
 void terminal (TpBloco disco[]){
-	int inode=raiz;
+	int inode=raiz,filho;
 	char usuario[7] = NOME_USUARIO;
 	char maquina[17] = "@nomedamaquina:~";
 	char caminho[NOME_ABSOLUTO]="\0";
@@ -147,11 +163,20 @@ void terminal (TpBloco disco[]){
 	do{
 		printf("%s ",caminho);
 		fflush(stdin);
-		gets(comando);
+		// gets(comando);
+		scanf(" %[^\n]",&comando);
+		// scanf("%s",&comando);
 		pegaComando(comando,firstComand);
 		if(strcmp(firstComand,"mkdir")==0){
 			if(verificaNome(comando,strlen(firstComand))){
-				criarDiretorio(inode,disco,topo,comando);
+
+				char nome[strlen(comando)];
+				if(separaNomeCaminho(comando,nome)) {
+					navegar(disco,inode,filho,comando);
+					inode = filho;
+
+				}
+				criarDiretorio(inode,disco,topo,nome);
 			}
 			else
 			{
@@ -166,7 +191,6 @@ void terminal (TpBloco disco[]){
 			else
 			{
 				if(strcmp(firstComand,"cd")==0){
-					int filho=0;
 					if(verificaNome(comando,strlen(firstComand))){
 						navegar(disco,inode,filho,comando);
 						inode = filho;

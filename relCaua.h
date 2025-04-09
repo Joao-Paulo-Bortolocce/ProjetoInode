@@ -31,10 +31,10 @@
 //	int tam = disco[pai].dir.tl,i;
 //	int tamBloc,k=0;
 //	for(i=0;i<tam;i++){
-//		if(disco[disco[pai].dir.entradas[i].inode].inode.header.permissao[0]=='d'){ //se for diretório eu chamo recursivamente pra fazer com esse diretório novo
+//		if(disco[disco[pai].dir.entradas[i].inode].inode.header.permissao[0]=='d'){ //se for diretï¿½rio eu chamo recursivamente pra fazer com esse diretï¿½rio novo
 //			blocosPerdidos(disco,aux,disco[disco[pai].dir.entradas[i].inode].inode.diretos[0]);
 //		}
-//		//após fazer com o diretório eu vou pegar todos as posições diretas, ind, dup e triplo do inode de todas as entradas desse diretório
+//		//apï¿½s fazer com o diretï¿½rio eu vou pegar todos as posiï¿½ï¿½es diretas, ind, dup e triplo do inode de todas as entradas desse diretï¿½rio
 //		tamBloc = disco[disco[pai].dir.entradas[i].inode].inode.tamanho; // pego tamanho de blocos que o inode daquela entrada ocupa
 
 //		while(k<QTD_BLOCOS && j<tamBloc){//assinalo os diretos no aux como usado
@@ -57,7 +57,7 @@
 //			for(int y =0; y<QTD_BLOCOS && j<tamBloc; y++){
 //				k=0;
 //				tamIndDup+=disco[disco[disco[disco[pai].dir.entradas[i].inode].inode.duplo].indiretos[y].tl;//vou somando o tamanho dos indiretos dos duplos para saber quando parar
-//				while(k<tamIndDup+tamInd+QTD_BLOCOS && j<tamBloc){//até o final do indireto na posicao do indireto duplo
+//				while(k<tamIndDup+tamInd+QTD_BLOCOS && j<tamBloc){//atï¿½ o final do indireto na posicao do indireto duplo
 //					aux[disco[disco[disco[disco[pai].dir.entradas[i].inode].inode.duplo].indiretos[y].indiretos[k++]] = 1;
 //					j++;
 //				}
@@ -86,27 +86,27 @@ void relatorio6 (TpBloco disco[],int diretorio){
 	int tam = disco[diretorio].dir.tl,i;
 	for(i=0;i<tam;i++){
 		 switch(disco[disco[diretorio].dir.entradas[i].inode].inode.header.permissao[0]) {
-		            case 'd': // Diretório
-		                textcolor(LIGHTBLUE);
+		            case 'd': // Diretï¿½rio
+		                //textcolor(LIGHTBLUE);
 		                printf("%-20s", disco[diretorio].dir.entradas[i].nome); // Nome com largura fixa para alinhamento
-		                textcolor(WHITE);
-		                cprintf(" <DIRETÓRIO>\n");
+		                //textcolor(WHITE);
+		                printf(" <DIRETï¿½RIO>\n");
 		                break;
 		
 		            case '-': // Arquivo
-		                textcolor(WHITE);
+		                //textcolor(WHITE);
 		                printf("%-20s", disco[diretorio].dir.entradas[i].nome);
-		                textcolor(LIGHTGRAY);
-		                cprintf(" <ARQUIVO>\n");
+		                //textcolor(LIGHTGRAY);
+		                printf(" <ARQUIVO>\n");
 		                break;
 		
 		            case 'l': // Link
-		                textcolor(LIGHTGREEN);
+		                //textcolor(LIGHTGREEN);
 		                printf("%-20s", disco[diretorio].dir.entradas[i].nome);
-		                textcolor(WHITE);
-		                cprintf(" <LINK>\n");
+		                //textcolor(WHITE);
+		                printf(" <LINK>\n");
 		                break;
 		 }
 	}	    
-	textcolor(WHITE); // Resetando a cor
+	//textcolor(WHITE); // Resetando a cor
 }
