@@ -17,7 +17,6 @@ struct TpEntrada {
 
 struct TpDiretorio {
     TpEntrada entradas[NUMERO_ENTRADAS];
-    int prox; //indice da continuação das entradas de diretorio
     int tl;
 };
 
@@ -51,16 +50,15 @@ struct TpInode {
 
 struct TpPilha {
     int topo;
-    int blocosLivres[MAX_PILHA]; // Supondo um limite máximo de 10 blocos livres
-    int prox; //Indice do vetor que é a proxima pilha de blocos livres
+    int blocosLivres[MAX_PILHA]; // Supondo um limite mï¿½ximo de 10 blocos livres
+    int prox; //Indice do vetor que ï¿½ a proxima pilha de blocos livres
 };
 
 struct TpBloco {
-    char terminal; // F-free, B-bad, I- inode, A- Arquivo (regular ou diretório), Posso ter esse terminal? ou só identificar se o Bad ou não?
+    char bad;
    	TpInode inode;
     TpDiretorio dir;
     TpPilha livres;
     TpIndireto indireto;
     char softLink[NOME_ABSOLUTO];
 };
-
