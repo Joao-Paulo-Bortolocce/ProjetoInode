@@ -26,7 +26,10 @@ void limpa() {
 
 int buscaEntrada(TpBloco disco[],int pai, int &filho,char nome[]) { //recebe Inode do pai e posiciona o filho e retorna a posição dele no vetor de entradas
 	int entradaFilho,dirPai=disco[pai].inode.diretos[0];
-	for (entradaFilho=0;entradaFilho<disco[dirPai].dir.tl && strcmp(disco[dirPai].dir.entradas[entradaFilho].nome,nome)!=0;entradaFilho++);
+	do {
+		for (entradaFilho=0;entradaFilho<disco[dirPai].dir.tl && strcmp(disco[dirPai].dir.entradas[entradaFilho].nome,nome)!=0;entradaFilho++);
+	}while (entradaFilho==disco[dirPai].dir.tl && disco[dirPai].dir.prox>-1);
+
 	if (entradaFilho<disco[dirPai].dir.tl) {
 		filho=disco[dirPai].dir.entradas[entradaFilho].inode;
 		return entradaFilho;
