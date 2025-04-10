@@ -12,8 +12,8 @@
 #include"gerenciaEntrada.h"
 #include"gerenciaDir.h"
 #include"gerenciarArquivo.h"
+#include"gerenciaLink.h"
 #include "relCaua.h"
-//#include "gerenciaLink.h"
 
 int topo;
 int raiz;
@@ -266,6 +266,128 @@ void incluiNomePasta(char caminho[], char comando[300]) {
     }
 }
 
+void ls(char comando[], TpBloco disco[], int dir) {
+    if (strcmp(comando, "\0") == 0) {
+        for (int i = 0; i < disco[dir].dir.tl; i++) {
+            if (strcmp(disco[dir].dir.entradas[i].nome, ".") != 0 && strcmp(disco[dir].dir.entradas[i].nome, "..") != 0)
+                printf("%s  ", disco[dir].dir.entradas[i].nome);
+        }
+    }
+    if (strcmp(comando, "-l") == 0) {
+        for (int i = 0; i < disco[dir].dir.tl; i++) {
+            printf("%s %d %s %s ", disco[disco[dir].dir.entradas[i].inode].inode.header.permissao,
+                   disco[disco[dir].dir.entradas[i].inode].inode.header.contLink,
+                   disco[disco[dir].dir.entradas[i].inode].inode.header.usuario,
+                   disco[disco[dir].dir.entradas[i].inode].inode.header.grupo);
+            switch (disco[disco[dir].dir.entradas[i].inode].inode.header.data.mes) {
+                case 1:
+                    printf("Jan %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 2:
+                    printf("Feb %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 3:
+                    printf("Mar %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 4:
+                    printf("Apr %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 5:
+                    printf("May %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 6:
+                    printf("Jun %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 7:
+                    printf("Jul %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 8:
+                    printf("Ago %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 9:
+                    printf("Set %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 10:
+                    printf("Oct %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 11:
+                    printf("Nov %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                case 12:
+                    printf("Dez %d %d %s", disco[disco[dir].dir.entradas[i].inode].inode.header.data.dia,
+                           disco[disco[dir].dir.entradas[i].inode].inode.header.data.ano,
+                           disco[dir].dir.entradas[i].nome);
+                    break;
+                default: ;
+            }
+            printf("\n");
+        }
+    }
+}
+
+void link(char comando[], int pai, TpBloco disco[], int &topo) {
+    char tipo[3];
+    char primeiroNome[NOME_ABSOLUTO];
+    char segundoNome[NOME_ABSOLUTO];
+    int i;
+    for (i = 0; i < 2; i++) {
+        tipo[i] = comando[i];
+    }
+    memmove(comando, comando + 3, strlen(comando) - 1);
+    tipo[i] = '\0';
+    if (strcmp(tipo, "-h") == 0) {
+        //hardLink
+        pegaComando(comando, primeiroNome);
+        int TL = 0;
+        for (int i = strlen(primeiroNome); i < strlen(comando); ++i) {
+            segundoNome[TL++] = comando[i];
+        }
+        segundoNome[TL] = '\0';
+        criaHardLink(pai, disco, topo, primeiroNome, segundoNome);
+    }
+    if (strcmp(tipo, "-s") == 0) {
+        //soft
+    }
+}
+
+void bad(TpBloco disco[], int numeroBloco) {
+    disco[numeroBloco].bad=1;
+}
+
+char vi(TpBloco disco[], int filho) {
+    int tam = disco[filho].inode.header.tamanho, i = 0, flag = 1;
+    while(i < tam && flag) {
+        if(disco[disco[filho].inode.diretos[i]].bad == 1)
+            flag = 0;
+        i++;
+    }
+    if(i < tam)
+        return 0;
+    return 1;
+}
+
 
 void terminal(TpBloco disco[]) {
     int inode = raiz, filho;
@@ -303,10 +425,11 @@ void terminal(TpBloco disco[]) {
                 printf("%s Nao pode ser o nome de uma pasta", comando);
             }
         } else {
-            if (strcmp(firstComand, "ls") == 0) {
+             if (strcmp(firstComand, "ls") == 0) {
                 int tamD = disco[inode].inode.header.tamanho;
+                verificaNome(comando, strlen(firstComand));
                 for (int i = 0; i < tamD; i++)
-                    relatorio6(disco, disco[inode].inode.diretos[i]);
+                    ls(comando, disco, disco[inode].inode.diretos[i]);
             } else {
                 if (strcmp(firstComand, "cd") == 0) {
                     if (verificaNome(comando, strlen(firstComand))) {
@@ -351,11 +474,45 @@ void terminal(TpBloco disco[]) {
                                 inode=aux;
                             }
                             else {
-                                printf("%s nao e reconhecido como um comando do sistema", firstComand);
+                                if (strcmp(firstComand, "link") == 0) {
+                                    if (verificaNome(comando, strlen(firstComand))) {
+                                        link(comando, inode, disco, topo);
+                                    }
+                                } else {
+                                    if (strcmp(firstComand, "bad") == 0) {
+                                        int numeroBloco = pegaTamanho(comando);
+                                        if (numeroBloco < tamanhoDisc) {
+                                            bad(disco, numeroBloco);
+                                            printf("numero do bloco %d se tornou bad", numeroBloco);
+                                        } else {
+                                            printf("numero do bloco invalido");
+                                        }
+                                    } else {
+                                        if (strcmp(firstComand, "vi") == 0) {
+                                            char aux[100];
+                                            int posArq;
+                                            if (verificaNome(comando, strlen(firstComand))) {
+                                                posArq = buscaEntrada(disco, inode, filho, comando);
+                                                if (filho >= 0) {
+                                                    char arqCorrompido = vi(disco, filho);
+                                                    if (arqCorrompido) {
+                                                        int j = 0;
+                                                        while (j < disco[filho].inode.header.tamanho) {
+                                                            printf("%d ", disco[filho].inode.diretos[j]);
+                                                            j++;
+                                                        }
+                                                    } else
+                                                        printf("arquivo %s corrompido", comando);
+                                                }
+                                            }
+                                        } else {
+                                            printf("%s nao e reconhecido como um comando do sistema", firstComand);
+                                        }
+                                    }
+                                }
                             }
                         }
-                        }
-                    } 
+                    }
                 }
             }
         }
