@@ -15,5 +15,5 @@ char isEmpty(TpPilha pilha){
 }
 
 char isFull(TpPilha pilha){
-	return pilha.topo==MAX_PILHA;
+	return pilha.topo==MAX_PILHA-1;
 }

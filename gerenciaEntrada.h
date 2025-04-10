@@ -1,10 +1,17 @@
+void adicionaBloco(int pai, TpBloco disco[],int &topo) {
+	if (disco[pai].inode.header.tamanho<QTD_DIRETOS) {
+		disco[pai].inode.diretos[disco[pai].inode.header.tamanho]=getBlocoLivre(disco,topo);
+		disco[pai].inode.header.tamanho++;
+	}
+}
+
 void criarEntrada(int pai,TpBloco disco[],int &topo,int posInode,char nome[]){
 	int i,dir;
 	if(disco[pai].inode.header.tamanho< QTD_DIRETOS){
 
 		for(i=0;i<disco[pai].inode.header.tamanho && disco[disco[pai].inode.diretos[i]].dir.tl==NUMERO_ENTRADAS;i++);
 		if(i==disco[pai].inode.header.tamanho){
-			//adicionaBloco(pai,disco);
+			adicionaBloco(pai,disco,topo);
 			disco[disco[pai].inode.diretos[i]].dir.tl=0;
 		}
 		dir=disco[pai].inode.diretos[i];

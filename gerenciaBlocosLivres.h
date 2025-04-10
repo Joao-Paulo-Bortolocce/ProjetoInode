@@ -1,11 +1,12 @@
 int iniciarBlocosLivres(TpBloco disco[],int tamanho){
 	int i,topo;
+	init(disco[0].livres);
 	for(i=tamanho-1,topo=0;i>topo;i--){
 		if(isFull(disco[topo].livres)){
 			disco[topo].livres.prox=topo+1;
 			topo++;
+			init(disco[topo].livres);
 		}
-		else
 			push(disco[topo].livres,i);
 	}
 	return topo;
@@ -24,7 +25,8 @@ void listarBlocosLivres(TpBloco disco[], int topo) {
 
     for (int i = topo; i >= 0; i--) {
         for (int j = disco[i].livres.topo; j >= 0; j--) {
-            printf("%d ", disco[i].livres.blocosLivres[j]);
+        	int teste=disco[i].livres.blocosLivres[j];
+            printf("%d ", teste);
         }
     }
 
