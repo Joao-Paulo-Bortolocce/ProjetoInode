@@ -18,3 +18,16 @@ int getBlocoLivre(TpBloco disco[],int &topo){
 		topo--;
 	return bloco;
 }
+
+void listarBlocosLivres(TpBloco disco[], int topo) {
+    printf("Blocos livres:\n");
+
+    for (int i = topo; i >= 0; i--) {
+        for (int j = disco[i].livres.topo; j >= 0; j--) {
+            printf("%d ", disco[i].livres.blocosLivres[j]);
+        }
+    }
+
+    printf("\n");
+}
+

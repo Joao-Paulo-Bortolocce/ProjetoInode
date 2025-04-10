@@ -82,6 +82,8 @@
 //	}
 //}
 
+
+
 void relatorio6 (TpBloco disco[],int diretorio){
 	int tam = disco[diretorio].dir.tl,i;
 	for(i=0;i<tam;i++){
