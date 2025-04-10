@@ -90,23 +90,23 @@ void relatorio6 (TpBloco disco[],int diretorio){
 		 switch(disco[disco[diretorio].dir.entradas[i].inode].inode.header.permissao[0]) {
 		            case 'd': // Diretï¿½rio
 		                //textcolor(LIGHTBLUE);
-		                printf("%-20s", disco[diretorio].dir.entradas[i].nome); // Nome com largura fixa para alinhamento
+		                cprintf("%-20s", disco[diretorio].dir.entradas[i].nome); // Nome com largura fixa para alinhamento
 		                //textcolor(WHITE);
-		                printf(" <DIRETï¿½RIO>\n");
+		                cprintf(" <DIRETÓRIO>\n");
 		                break;
 		
 		            case '-': // Arquivo
 		                //textcolor(WHITE);
-		                printf("%-20s", disco[diretorio].dir.entradas[i].nome);
+		                cprintf("%-20s", disco[diretorio].dir.entradas[i].nome);
 		                //textcolor(LIGHTGRAY);
-		                printf(" <ARQUIVO>\n");
+		                cprintf(" <ARQUIVO>\n");
 		                break;
 		
 		            case 'l': // Link
 		                //textcolor(LIGHTGREEN);
-		                printf("%-20s", disco[diretorio].dir.entradas[i].nome);
+		                cprintf("%-20s", disco[diretorio].dir.entradas[i].nome);
 		                //textcolor(WHITE);
-		                printf(" <LINK>\n");
+		                cprintf(" <LINK>\n");
 		                break;
 		 }
 	}	    

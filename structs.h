@@ -1,5 +1,5 @@
 #define NUMERO_ENTRADAS 10
-#define NOME_ENTRADA 15
+#define NOME_ENTRADA 50
 #define NOME_USUARIO "robson"
 #define TAM_NOME_USUARIO 20
 #define NOME_ABSOLUTO 256

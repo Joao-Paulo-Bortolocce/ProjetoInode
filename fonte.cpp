@@ -1,6 +1,6 @@
 #include<stdio.h>
 // #include<windows.h>
-// #include<conio2.h>
+ #include<conio2.h>
 #include<string.h>
 #include<stdlib.h>
 
@@ -150,7 +150,7 @@ char separaNomeCaminho(char comando[], char nome[]) {
     // retorna true se caminho for diferente de nome
     int tl = strlen(comando);
     int i;
-    for (i = tl; i >= 0 && comando[i] != '/'; i--);
+    for (i = tl-1; i >= 0 && comando[i] != '/'; i--);
     if (i < 0) {
         strcpy(nome, comando);
         return 0;
@@ -506,6 +506,13 @@ void terminal(TpBloco disco[]) {
                                                 }
                                             }
                                         } else {
+                                        	if(strcmp(firstComand, "rel6") == 0){
+                                        		int tamD = disco[inode].inode.header.tamanho;
+								                for (int i = 0; i < tamD; i++)
+								                	relatorio6 (disco,disco[inode].inode.diretos[i]);
+								                
+                                        	}
+                                        	else
                                             printf("%s nao e reconhecido como um comando do sistema", firstComand);
                                         }
                                     }
