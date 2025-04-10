@@ -18,8 +18,6 @@
 int topo;
 int raiz;
 int tamanhoDisc;
-char pilhaDiretorio[20][15];
-int iPilha = -1;
 
 void limpa() {
 #ifdef linux
@@ -27,17 +25,6 @@ void limpa() {
 #else
 	system("cls");
 #endif
-}
-
-void incluiDir(char nome[15]) {
-    iPilha++;
-    strcpy(pilhaDiretorio[iPilha], nome);
-}
-
-void removeDir(char nomeDir[15]) {
-    strcpy(nomeDir, pilhaDiretorio[iPilha]);
-    pilhaDiretorio[iPilha][0] = '\0';
-    iPilha--;
 }
 
 int buscaEntrada(TpBloco disco[], int pai, int &filho, char nome[]) {
@@ -449,7 +436,7 @@ void terminal(TpBloco disco[]) {
                         listarBlocosLivres(disco, topo);
                     }
                     else{
-                        if (strcmp(firstComand, "rmDir") == 0) {
+                        if (strcmp(firstComand, "rmdir") == 0) {
                             char nomesD[100][100];
                             int qtdDir = nomesDiretorios(disco, disco[inode].inode.diretos[0], nomesD);
                             if (verificaNome(comando, strlen(firstComand)) && existeNomeDiretorio(
@@ -496,16 +483,13 @@ void terminal(TpBloco disco[]) {
                                                 if (filho >= 0) {
                                                     char arqCorrompido = vi(disco, filho);
                                                     if (arqCorrompido) {
-                                                        int j = 0;
-                                                        while (j < disco[filho].inode.header.tamanho) {
-                                                            printf("%d ", disco[filho].inode.diretos[j]);
-                                                            j++;
+                                                        printf("arquivo aberto");
                                                         }
                                                     } else
                                                         printf("arquivo %s corrompido", comando);
                                                 }
                                             }
-                                        } else {
+                                         else {
                                         	if(strcmp(firstComand, "rel6") == 0){
                                         		int tamD = disco[inode].inode.header.tamanho;
 								                for (int i = 0; i < tamD; i++)
@@ -516,6 +500,7 @@ void terminal(TpBloco disco[]) {
                                             printf("%s nao e reconhecido como um comando do sistema", firstComand);
                                         }
                                     }
+                                
                                 }
                             }
                         }
