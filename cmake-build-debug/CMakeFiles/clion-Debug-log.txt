@@ -1,0 +1,1 @@
+CMakeLists.txt not found in C:\Users\caua_\OneDrive\Área de Trabalho\FIPP\TERMOS\5 TERMO\Sistemas Operacionais II\PRIMEIRO BIMESTRE\Trabalho\ProjetoInode Select CMakeLists.txt
