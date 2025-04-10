@@ -173,15 +173,19 @@ int nomesDiretorios(TpBloco disco[], int diretorio, char nomesD[][100]) {
     return i;
 }
 
-int pegaTamanho(char comando[], char tamVet[]) {
-    int tam, i = strlen(comando) - 1;
+int pegaTamanho(char comando[]) {
+    char tamVet[20];
+    int tam, i = strlen(comando) - 1,aux;
     int j;
-    for (j = 0; i >= 0 && comando[i] != ' '; j++, i--)
+    for (; i >= 0 && comando[i] != ' ' && comando[i]>='0' && comando[i]<='9';  i--);
+    if (i < 0 || comando[i] != ' ')
+        return -1;
+    aux=i;
+    for (j = 0; i<comando[i]!='\0'; j++,i++) {
         tamVet[j] = comando[i];
+    }
     tamVet[j] = '\0';
-    comando[i] = '\0';
-    if (i < 0)
-        return 1;
+    comando[aux] = '\0';
     tam = atoi(tamVet);
     return tam;
 }
@@ -343,31 +347,45 @@ void ls(char comando[], TpBloco disco[], int dir) {
     }
 }
 
-void link (char comando[],int pai,TpBloco disco[],int &topo) {
+void link(char comando[], int pai, TpBloco disco[], int &topo) {
     char tipo[3];
     char primeiroNome[NOME_ABSOLUTO];
     char segundoNome[NOME_ABSOLUTO];
     int i;
-    for (i=0;i<2;i++) {
-        tipo[i]=comando[i];
+    for (i = 0; i < 2; i++) {
+        tipo[i] = comando[i];
     }
     memmove(comando, comando + 3, strlen(comando) - 1);
-    tipo[i]='\0';
-    if (strcmp(tipo,"-h")==0) {
+    tipo[i] = '\0';
+    if (strcmp(tipo, "-h") == 0) {
         //hardLink
-        pegaComando(comando,primeiroNome);
-        int TL=0;
-        for (int i = strlen(primeiroNome); i <strlen(comando); ++i) {
-            segundoNome[TL++]=comando[i];
+        pegaComando(comando, primeiroNome);
+        int TL = 0;
+        for (int i = strlen(primeiroNome); i < strlen(comando); ++i) {
+            segundoNome[TL++] = comando[i];
         }
-        segundoNome[TL]='\0';
-        criaHardLink(pai,disco,topo,primeiroNome,segundoNome);
+        segundoNome[TL] = '\0';
+        criaHardLink(pai, disco, topo, primeiroNome, segundoNome);
     }
-    if (strcmp(tipo,"-s")==0) {
+    if (strcmp(tipo, "-s") == 0) {
         //soft
     }
 }
 
+void bad(TpBloco disco[], int numeroBloco) {
+    disco[numeroBloco].bad=1;
+}
+
+char vi(TpBloco disco[], int filho) {
+    int tam = disco[filho].inode.header.tamanho, i = 0, flag = 1;
+    while(i < tam && flag) {
+        if(disco[disco[filho].inode.diretos[i]].bad == 1)
+            flag = 0;
+    }
+    if(i < tam)
+        return 0;
+    return 1;
+}
 
 void terminal(TpBloco disco[]) {
     int inode = raiz, filho;
@@ -437,7 +455,7 @@ void terminal(TpBloco disco[]) {
                         } else {
                             if (strcmp(firstComand, "touch") == 0) {
                                 char tam[20];
-                                int tl = pegaTamanho(comando, tam), aux = inode;
+                                int tl = pegaTamanho(comando), aux = inode;
                                 if (verificaNome(comando, strlen(firstComand)) && tl >= 0) {
                                     char nome[strlen(comando)];
                                     if (separaNomeCaminho(comando, nome)) {
@@ -448,13 +466,41 @@ void terminal(TpBloco disco[]) {
                                 }
                                 inode = aux;
                             } else {
-                                if (strcmp(firstComand,"link")==0) {
-                                    if (verificaNome(comando,strlen(firstComand))) {
-                                        link(comando,inode,disco,topo);
+                                if (strcmp(firstComand, "link") == 0) {
+                                    if (verificaNome(comando, strlen(firstComand))) {
+                                        link(comando, inode, disco, topo);
                                     }
-                                }
-                                else {
-                                    printf("%s nao e reconhecido como um comando do sistema", firstComand);
+                                } else {
+                                    if (strcmp(firstComand, "bad") == 0) {
+                                        int numeroBloco = pegaTamanho(comando);
+                                        if (numeroBloco < tamanhoDisc) {
+                                            bad(disco, numeroBloco);
+                                            printf("numero do bloco %d se tornou bad", numeroBloco);
+                                        } else {
+                                            printf("numero do bloco invalido");
+                                        }
+                                    } else {
+                                        if (strcmp(firstComand, "vi") == 0) {
+                                            char aux[100];
+                                            int posArq;
+                                            if (verificaNome(comando, strlen(firstComand))) {
+                                                posArq = buscaEntrada(disco, inode, filho, comando);
+                                                if (filho >= 0) {
+                                                    char arqCorrompido = vi(disco, filho);
+                                                    if (arqCorrompido) {
+                                                        int j = 0;
+                                                        while (j < disco[filho].inode.header.tamanho) {
+                                                            printf("%d ", disco[filho].inode.diretos[j]);
+                                                            j++;
+                                                        }
+                                                    } else
+                                                        printf("arquivo %s corrompido", comando);
+                                                }
+                                            }
+                                        } else {
+                                            printf("%s nao e reconhecido como um comando do sistema", firstComand);
+                                        }
+                                    }
                                 }
                             }
                         }
