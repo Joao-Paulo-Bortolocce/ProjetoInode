@@ -17,6 +17,7 @@ int getBlocoLivre(TpBloco disco[],int &topo){
 	int bloco= pop(disco[topo].livres);
 	if(isEmpty(disco[topo].livres))
 		topo--;
+	disco[bloco].bad=0;
 	return bloco;
 }
 

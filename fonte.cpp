@@ -173,15 +173,19 @@ int nomesDiretorios(TpBloco disco[], int diretorio, char nomesD[][100]) {
     return i;
 }
 
-int pegaTamanho(char comando[], char tamVet[]) {
-    int tam, i = strlen(comando) - 1;
+int pegaTamanho(char comando[]) {
+    char tamVet[20];
+    int tam, i = strlen(comando) - 1,aux;
     int j;
-    for (j = 0; i >= 0 && comando[i] != ' '; j++, i--)
+    for (; i >= 0 && comando[i] != ' ' && comando[i]>='0' && comando[i]<='9';  i--);
+    if (i < 0 || comando[i] != ' ')
+        return -1;
+    aux=i;
+    for (j = 0; i<comando[i]!='\0'; j++,i++) {
         tamVet[j] = comando[i];
+    }
     tamVet[j] = '\0';
-    comando[i] = '\0';
-    if (i < 0)
-        return 1;
+    comando[aux] = '\0';
     tam = atoi(tamVet);
     return tam;
 }
@@ -320,7 +324,6 @@ void terminal(TpBloco disco[]) {
                     if (strcmp(firstComand, "fb") == 0) {
                         //verifica quais blocos est�o livres e faz sua listagem
                         listarBlocosLivres(disco, topo);
-                    } else {
                         if (strcmp(firstComand, "rmDir") == 0) {
                             char nomesD[100][100];
                             int qtdDir = nomesDiretorios(disco, disco[inode].inode.diretos[0], nomesD);
@@ -329,21 +332,31 @@ void terminal(TpBloco disco[]) {
                                 rmDir(disco, topo, inode, disco[disco[inode].inode.diretos[0]].dir, comando);
                         } else {
                             if (strcmp(firstComand, "touch") == 0) {
-                                char tam[20];
-                                int tl = pegaTamanho(comando, tam),aux=inode;
+
+                                int tl = pegaTamanho(comando),aux=inode;
                                 if (verificaNome(comando, strlen(firstComand)) && tl >= 0) {
                                     char nome[strlen(comando)];
                                     if (separaNomeCaminho(comando, nome)) {
                                         navegar(disco, inode, filho, comando);
                                         inode = filho;
                                     }
-                                    criarArquivo(inode, disco, topo, nome, tl / 10);
+                                    if (buscaEntrada(disco,inode,filho,nome)<0)
+                                        criarArquivo(inode, disco, topo, nome, tl / 10);
+                                    else
+                                        printf("o nome do arquivo %s ja existe nesse diretorio",nome);
+
                                 }
                                 inode=aux;
-                            } else {
+                            }
+                            else {
+                                else {
+                                    printf("%s nao e reconhecido como um comando do sistema", firstComand);
+                                }
+
                                 printf("%s nao e reconhecido como um comando do sistema", firstComand);
                             }
                         }
+                    } else {
                     }
                 }
             }
