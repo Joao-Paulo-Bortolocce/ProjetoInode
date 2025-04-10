@@ -324,6 +324,8 @@ void terminal(TpBloco disco[]) {
                     if (strcmp(firstComand, "fb") == 0) {
                         //verifica quais blocos est�o livres e faz sua listagem
                         listarBlocosLivres(disco, topo);
+                    }
+                    else{
                         if (strcmp(firstComand, "rmDir") == 0) {
                             char nomesD[100][100];
                             int qtdDir = nomesDiretorios(disco, disco[inode].inode.diretos[0], nomesD);
@@ -349,15 +351,11 @@ void terminal(TpBloco disco[]) {
                                 inode=aux;
                             }
                             else {
-                                else {
-                                    printf("%s nao e reconhecido como um comando do sistema", firstComand);
-                                }
-
                                 printf("%s nao e reconhecido como um comando do sistema", firstComand);
                             }
                         }
-                    } else {
-                    }
+                        }
+                    } 
                 }
             }
         }
